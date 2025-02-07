@@ -1,0 +1,46 @@
+# Bytecode and cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.swo
+
+# Virtual environment
+venv/
+.env
+.envrc
+*.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PostgreSQL and database files
+*.sqlite3
+*.db
+*.sql
+pgdata/
+pg_log/
+
+# Logs and debugging files
+logs/
+*.log
+debug.log
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.iml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Compiled C extensions
+*.so
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# OS-specific files
+.DS_Store
+Thumbs.db
