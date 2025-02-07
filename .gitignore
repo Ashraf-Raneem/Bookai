@@ -21,6 +21,11 @@ pip-delete-this-directory.txt
 pgdata/
 pg_log/
 
+# Flask session files
+instance/
+flask_session/
+*.session
+
 # Logs and debugging files
 logs/
 *.log
