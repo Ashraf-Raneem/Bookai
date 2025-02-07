@@ -24,6 +24,7 @@ pg_log/
 # Flask session files
 instance/
 flask_session/
+.flaskenv
 *.session
 
 # Logs and debugging files
