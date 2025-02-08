@@ -65,3 +65,25 @@ def get_book():
         print(data, res, col)
 
     return jsonify(data[0])
+
+
+@app.route("/search", methods=["GET"])
+def query_search():
+    query = request.args.get('query', type=str)
+    sql = text("""
+
+        SELECT * FROM BOOKS 
+        WHERE 
+        isbn ILIKE :query OR
+        author ILIKE :query OR
+        title ILIKE :query OR
+        year::TEXT ILIKE :query
+    
+    """)
+
+    with engine.connect() as conn:
+        res = conn.execute(sql, {'query': f'%{query}%'})
+        col = res.keys()
+        data = [dict(zip(col, row)) for row in res.fetchall()]
+
+    return jsonify(data)
