@@ -37,6 +37,18 @@ debug.log
 .idea/
 *.iml
 
+# Node.js / React frontend
+book-review-frontend/node_modules/
+book-review-frontend/build/
+book-review-frontend/.parcel-cache/
+book-review-frontend/.eslintcache
+book-review-frontend/yarn.lock
+book-review-frontend/package-lock.json
+book-review-frontend/.turbo/
+book-review-frontend/.next/
+book-review-frontend/.nuxt/
+book-review-frontend/dist/
+
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
