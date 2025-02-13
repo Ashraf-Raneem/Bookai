@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { postData } from "./api_functions";
 
-const AuthForm = ({ type, onSubmit, handleState }) => {
+const AuthForm = ({ type, handleState }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -9,6 +10,28 @@ const AuthForm = ({ type, onSubmit, handleState }) => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const clearForm = () => {
+        setFormData({
+            email: "",
+            password: "",
+            ...(type === "register" && { name: "" }),
+        });
+    };
+
+    const onSubmit = (e, data) => {
+        e.preventDefault();
+        if (type === "login") {
+            postData("/login", data)
+                .then((res) => console.log("Success:", res))
+                .catch((err) => console.log("Error:", err));
+        } else {
+            postData("/register", data)
+                .then((res) => console.log("Success:", res))
+                .catch((err) => console.log("Error:", err));
+        }
+        clearForm();
     };
 
     return (

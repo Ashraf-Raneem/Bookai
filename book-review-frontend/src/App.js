@@ -1,16 +1,15 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router";
 import AuthPage from "./pages/Auth";
+import Home from "./pages/Home";
+import Navbar from "./components/Navbar";
 
 function App() {
-    const [data, setData] = useState();
-
     return (
         <div className="App">
             <Routes>
-                <Route index element={<AuthPage />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/" element={<Home />} />
             </Routes>
         </div>
     );
