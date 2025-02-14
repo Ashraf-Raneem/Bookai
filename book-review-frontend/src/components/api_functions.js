@@ -13,3 +13,17 @@ export const postData = async (endpoint, data) => {
         throw error;
     }
 };
+
+export const getData = async (endpoint) => {
+    try {
+        const response = await axios.get(`${endpoint}`, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error posting data:", error.response?.data || error.message);
+        throw error;
+    }
+};

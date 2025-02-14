@@ -111,7 +111,7 @@ def login():
 @app.route("/books", methods=["GET"])
 def get_books():
     page = request.args.get('page', 1, type=int)
-    per_page = 10
+    per_page = 12
     limit = page * per_page
 
     sql = text("""
@@ -166,6 +166,7 @@ def query_search():
     with engine.connect() as conn:
         res = conn.execute(sql, {'query': f'%{query}%'})
         col = res.keys()
-        data = [dict(zip(col, row)) for row in res.fetchall()]
+        data = {'query': query, 'books': [
+            dict(zip(col, row)) for row in res.fetchall()]}
 
     return jsonify(data)

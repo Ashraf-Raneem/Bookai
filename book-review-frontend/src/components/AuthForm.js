@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { postData } from "./api_functions";
+import { useNavigate } from "react-router";
 
 const AuthForm = ({ type, handleState }) => {
     const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ const AuthForm = ({ type, handleState }) => {
         password: "",
         ...(type === "register" && { name: "" }),
     });
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +26,11 @@ const AuthForm = ({ type, handleState }) => {
         e.preventDefault();
         if (type === "login") {
             postData("/login", data)
-                .then((res) => console.log("Success:", res))
+                .then((res) => {
+                    localStorage.setItem("user", JSON.stringify(res.user));
+                    // Redirect user
+                    navigate("/", { replace: true });
+                })
                 .catch((err) => console.log("Error:", err));
         } else {
             postData("/register", data)
