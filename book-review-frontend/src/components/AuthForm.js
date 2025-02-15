@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { postData } from "./api_functions";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const AuthForm = ({ type, handleState }) => {
     const [formData, setFormData] = useState({
@@ -27,6 +28,16 @@ const AuthForm = ({ type, handleState }) => {
         if (type === "login") {
             postData("/login", data)
                 .then((res) => {
+                    toast("You have successfully logged in", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
                     localStorage.setItem("user", JSON.stringify(res.user));
                     // Redirect user
                     navigate("/", { replace: true });
@@ -34,7 +45,18 @@ const AuthForm = ({ type, handleState }) => {
                 .catch((err) => console.log("Error:", err));
         } else {
             postData("/register", data)
-                .then((res) => console.log("Success:", res))
+                .then((res) =>
+                    toast("You have successfully registered", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    }),
+                )
                 .catch((err) => console.log("Error:", err));
         }
         clearForm();

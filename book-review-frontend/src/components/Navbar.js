@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 const Navbar = ({ user }) => {
     const navigate = useNavigate();
     const user_parsed = JSON.parse(user);
+
     const handleLogout = () => {
         console.log("User logged out");
         localStorage.clear();
@@ -13,7 +14,9 @@ const Navbar = ({ user }) => {
         <nav className="bg-slate-800 text-white p-4 shadow-lg">
             <div className="container mx-auto flex justify-between items-center">
                 {/* Logo */}
-                <h1 className="text-2xl font-bold">Home</h1>
+                <h1 className="text-2xl font-bold cursor-pointer" onClick={() => navigate("/")}>
+                    Home
+                </h1>
                 <div className="">
                     <span className="text-sm pr-5">Hello, {user_parsed.username}</span>
                     {/* Logout Button */}

@@ -1,6 +1,6 @@
 import React from "react";
 
-const BookCardCover = () => {
+export const BookCardCoversm = () => {
     return (
         <div className="bg-black w-54 h-52 flex justify-center items-center">
             <p className="text-white italic text-xs">Image unavailable</p>
@@ -8,4 +8,10 @@ const BookCardCover = () => {
     );
 };
 
-export default BookCardCover;
+export const BookCardCoverlg = () => {
+    return (
+        <div className="bg-black w-80 h-76 flex justify-center items-center">
+            <p className="text-white italic text-xs">Image unavailable</p>
+        </div>
+    );
+};

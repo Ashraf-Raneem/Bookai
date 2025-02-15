@@ -132,7 +132,7 @@ def get_books():
 @app.route("/book", methods=["GET"])
 def get_book():
     book_id = request.args.get('book_id', type=str)
-    print(book_id)
+
     sql = text("""
                
     SELECT * FROM books
@@ -144,7 +144,6 @@ def get_book():
         res = conn.execute(sql, {'book_id': book_id})
         col = res.keys()
         data = [dict(zip(col, row)) for row in res.fetchall()]
-        print(data, res, col)
 
     return jsonify(data[0])
 

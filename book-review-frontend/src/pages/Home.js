@@ -64,7 +64,7 @@ const Home = () => {
                     </button>
                 </div>
             )}
-            <div className="grid grid-cols-3 gap-8 my-12">
+            <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8 my-12">
                 {searchData ? (
                     searchData.books.map((book) => {
                         return <BookCard book={book} key={book.isbn} />;
