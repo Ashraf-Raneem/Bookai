@@ -169,3 +169,92 @@ def query_search():
             dict(zip(col, row)) for row in res.fetchall()]}
 
     return jsonify(data)
+
+
+@app.route("/review", methods=["GET", "PUT", "DELETE", "POST"])
+def review():
+    if request.method == 'GET':
+        data = request.args
+    else:
+        data = request.get_json()
+
+    book_id = data.get('book_id')
+    user_id = data.get('user_id')
+    username = data.get('user_name')
+    comment = data.get('comment')
+    rating = data.get('rating')
+
+    if not book_id:
+        return jsonify({"error": "Book id needed"})
+
+    new_review_sql = text("""
+
+    INSERT INTO
+    review (isbn, user_id, username, comment, rating)
+    VALUES (:book_id, :user_id, :username, :comment, :rating)
+
+    """)
+
+    has_user_review_sql = text("""
+
+    SELECT *
+    FROM review WHERE isbn= :book_id AND user_id= :user_id
+
+    """)
+
+    get_all_reviews_sql = text("""
+
+    SELECT *
+    FROM review WHERE isbn= :book_id
+    ORDER BY CASE WHEN user_id = :target_id THEN 0 ELSE 1 END, user_id;
+
+    """)
+
+    delete_review_sql = text("""
+
+    DELETE FROM review
+    WHERE isbn= :book_id AND user_id= :user_id
+    
+    """)
+
+    with engine.connect() as conn:
+        try:
+            # Getting all the reviews for the book
+            if request.method == 'GET':
+                res = conn.execute(get_all_reviews_sql, {
+                                   'book_id': book_id, 'target_id': user_id})
+                col = res.keys()
+                data = [dict(zip(col, row)) for row in res.fetchall()]
+                return jsonify(data)
+
+            # Adding a review
+            if request.method == "POST":
+
+                # Checking if the user has a comment already
+                res_has_user_review = conn.execute(
+                    has_user_review_sql, {'book_id': book_id, 'user_id': user_id})
+                existing_review = res_has_user_review.fetchone()
+
+                if existing_review:
+                    return jsonify({"error": "User already has a review"})
+
+                # Adding a new review
+                res_new_user_review = conn.execute(
+                    new_review_sql, {'book_id': book_id, 'user_id': user_id, 'comment': comment, 'username': username, 'rating': rating})
+
+                conn.commit()
+
+                return jsonify({"message": "Review added successfully"})
+
+            # Delete a review
+            if request.method == "DELETE":
+                res = conn.execute(delete_review_sql, {
+                                   'book_id': book_id, 'user_id': user_id})
+                col = res.keys()
+                data = [dict(zip(col, row)) for row in res.fetchall()]
+                return jsonify({"message": "Review deleted successfully"})
+
+        except Exception as e:
+            return jsonify({"Error": str(e)}), 400
+        finally:
+            conn.close()

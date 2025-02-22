@@ -14,9 +14,9 @@ export const postData = async (endpoint, data) => {
     }
 };
 
-export const getData = async (endpoint) => {
+export const getData = async (endpoint, data) => {
     try {
-        const response = await axios.get(`${endpoint}`, {
+        const response = await axios.get(`${endpoint}`, data, {
             headers: {
                 "Content-Type": "application/json",
             },
