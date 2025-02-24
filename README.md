@@ -19,7 +19,7 @@ This is a full-stack web application built with a React frontend and a Flask bac
 - API endpoints for books and reviews
 - PostgreSQL database for storing users, books, and reviews
 - Token-based authentication (JWT)
-
+- Generated a summarized description with the help of Google's Gemini api
 ---
 
 ## Requirements to run the application
