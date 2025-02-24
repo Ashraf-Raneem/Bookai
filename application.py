@@ -1,10 +1,13 @@
 import os
 import random
+import requests
 from flask import Flask, session, jsonify, request
 from flask_session import Session
 from flask_jwt_extended import JWTManager, create_access_token
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
+from google import genai
+
 
 app = Flask(__name__)
 
@@ -22,6 +25,8 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_TOKEN")
 jwt = JWTManager(app)
+gemini_key = os.getenv("GEMINI_API_KEY")
+gemini_url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}'
 
 
 @app.route("/")
@@ -129,6 +134,16 @@ def get_books():
     return jsonify(data)
 
 
+def summarize_abstract(desc):
+    client = genai.Client(api_key=gemini_key)
+
+    response = client.models.generate_content(
+        model="gemini-1.5-flash", contents={f'summarize this text using less than 50 words : {desc}'}
+    )
+
+    return response.text
+
+
 @app.route("/book", methods=["GET"])
 def get_book():
     book_id = request.args.get('book_id', type=str)
@@ -141,11 +156,36 @@ def get_book():
     """)
 
     with engine.connect() as conn:
-        res = conn.execute(sql, {'book_id': book_id})
-        col = res.keys()
-        data = [dict(zip(col, row)) for row in res.fetchall()]
+        res_sql = conn.execute(sql, {'book_id': book_id})
+        res = requests.get(
+            "https://www.googleapis.com/books/v1/volumes", params={"q": f"isbn:{book_id}"})
+        data = res.json()
 
-    return jsonify(data[0])
+        if data.get('items') is not None:
+
+            info = data['items'][0]['volumeInfo']
+            book_des = info['description']
+            summarized = summarize_abstract(book_des)
+
+            res_dict = {
+
+                "title": info['title'],
+                "author": info['authors'][0],
+                "publishedDate": info['publishedDate'],
+                "ISBN_10": info['industryIdentifiers'][1]['identifier'],
+                "ISBN_13": info['industryIdentifiers'][0]['identifier'],
+                "summarizedDescription": summarized,
+                "averageRating": info.get('averageRating') if info.get('averageRating') is not None else None,
+                "ratingsCount": info.get('ratingsCount') if info.get('ratingsCount') is not None else None
+            }
+
+            return jsonify(res_dict)
+        else:
+            col = res_sql.keys()
+            sql_data = [dict(zip(col, row)) for row in res_sql.fetchall()]
+            sql_data[0]['type'] = 'sql'
+
+            return jsonify(sql_data[0])
 
 
 @app.route("/search", methods=["GET"])
