@@ -3,6 +3,7 @@ import { BookCardCoverlg } from "../components/BookCardCover";
 import { getData } from "../components/api_functions";
 import ReviewCard from "../components/ReviewCard";
 import ReviewForm from "../components/ReviewForm";
+import Rating from "../components/Rating";
 
 const BookDetail = () => {
     const [bookData, setBookData] = useState();
@@ -26,26 +27,56 @@ const BookDetail = () => {
             {bookData && (
                 <React.Fragment>
                     <h2 className="text-2xl font-bold my-8">Here are some details for book {bookData.title}</h2>
-                    <div className="flex flex-col justify-center items-start lg:grid grid-cols-3 gap-8 mx-2">
-                        <div className="lg:col-span-1 ml-2">
+                    <div className="flex flex-col justify-center items-start lg:grid lg:grid-cols-2 lg:gap-5 mx-2">
+                        <div className="ml-2 max-w-[500px]">
                             <BookCardCoverlg />
 
-                            <div className="grid grid-cols-2 gap-8 mt-8 text-sm">
-                                <p className="font-bold">
-                                    Title : <span className="italic">{bookData.title}</span>
-                                </p>
-                                <p className="font-bold">
-                                    ISBN : <span className="italic">{bookData.isbn}</span>
-                                </p>
-                                <p className="font-bold">
-                                    Author : <span className="italic">{bookData.author}</span>
-                                </p>
-                                <p className="font-bold">
-                                    Published Year : <span className="italic">{bookData.year}</span>
-                                </p>
-                            </div>
+                            {bookData.type ? (
+                                <div className="grid grid-cols-2 gap-8 mt-8 text-sm">
+                                    <p className="font-bold">
+                                        Title : <span className="italic">{bookData.title}</span>
+                                    </p>
+                                    <p className="font-bold">
+                                        ISBN : <span className="italic">{bookData.isbn}</span>
+                                    </p>
+                                    <p className="font-bold">
+                                        Author : <span className="italic">{bookData.author}</span>
+                                    </p>
+                                    <p className="font-bold">
+                                        Published Year : <span className="italic">{bookData.year}</span>
+                                    </p>
+                                </div>
+                            ) : (
+                                <React.Fragment>
+                                    <div className="grid grid-cols-2 gap-8 mt-8 text-sm max-w-[500px]">
+                                        <p className="font-bold">
+                                            Title : <span className="italic">{bookData.title}</span>
+                                        </p>
+                                        <p className="font-bold">
+                                            Published Year : <span className="italic">{bookData.publishedDate}</span>
+                                        </p>
+                                        <p className="font-bold">
+                                            ISBN 10: <span className="italic">{bookData.ISBN_10}</span>
+                                        </p>
+                                        <p className="font-bold">
+                                            ISBN 13: <span className="italic">{bookData.ISBN_13}</span>
+                                        </p>
+                                        <p className="font-bold">
+                                            Author : <span className="italic">{bookData.author}</span>
+                                        </p>
+                                        <div className="flex flex-row items-center">
+                                            <p className="font-bold mr-2">Rating:</p>
+                                            <Rating disabled={true} value={bookData.averageRating} />
+                                        </div>
+                                    </div>
+                                    <div className="my-6 text-sm">
+                                        <p className="font-bold">Summarized Abstract</p>
+                                        <span className="text-xs">{bookData.summarizedDescription}</span>
+                                    </div>
+                                </React.Fragment>
+                            )}
                         </div>
-                        <div className="flex flex-col items-center justify-start lg:col-span-2 max-w-[700px]">
+                        <div className="flex flex-col items-center justify-start max-w-[700px]">
                             <div className="flex flex-row justify-between item-center w-full">
                                 <h3 className="text-2xl font-bold">Reviews</h3>
                                 {!reviewData.some((item) => item["user_id"] === user.id) ? (
