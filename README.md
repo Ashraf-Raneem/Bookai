@@ -1,6 +1,4 @@
-# Project 1
-
-# Book Review Website
+# Bookai
 
 This is a full-stack web application built with a React frontend and a Flask backend. The application allows users to browse through a collection of several thousand books, review books, rate them, and browse other users' reviews.
 
