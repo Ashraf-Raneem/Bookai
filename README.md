@@ -107,3 +107,15 @@ SECRET_KEY=your_secret_key
 JWT_SECRET=your_jwt_secret
 ```
 
+## Application Screenshots
+- Authentication Page
+
+![Auth](./assets/Auth.png)
+
+- Home Page
+
+![Home Page](./assets/Home.png)
+
+- Book Details
+
+![Book Detail](./assets/Book%20Detail.png)

@@ -64,7 +64,9 @@ const AuthForm = ({ type, handleState }) => {
 
     return (
         <div className="h-screen flex flex-col justify-center items-center">
-            <h1 className="text-3xl text-black mb-20">Welcome to your bookstore</h1>
+            <h1 className="text-3xl text-black mb-20">
+                Welcome to your <span className="font-bold">Bookai</span>
+            </h1>
             <div className="p-6 rounded-lg shadow-lg w-96 bg-slate-200 text-black">
                 <h2 className="text-2xl font-bold text-center mb-4">{type === "login" ? "Login" : "Register"}</h2>
                 <form onSubmit={(e) => onSubmit(e, formData)} className="space-y-4">
